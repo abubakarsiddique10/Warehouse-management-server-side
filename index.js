@@ -163,6 +163,10 @@ app.get('/', (req, res) => {
     res.send('server running')
 })
 
+app.get('/hero', (req, res) => {
+    res.send('hero running')
+})
+
 app.listen(port, () => {
     console.log('example app', port)
 })
