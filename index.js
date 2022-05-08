@@ -10,6 +10,7 @@ require('dotenv').config();
 app.use(cors());
 app.use(express.json());
 
+// get jwt token and verify token
 function varifyJWT(req, res, next) {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
@@ -70,11 +71,14 @@ async function run() {
             res.send(result);
         });
 
+        // add single product in db
         app.post('/products', async (req, res) => {
             const product = req.body;
             const result = await productCollection.insertOne(product);
             res.send(result);
         })
+
+        // product update
         app.put('/products/:id', async (req, res) => {
             const id = req.params.id;
             const updateQuantity = req.body;
@@ -100,7 +104,6 @@ async function run() {
         app.get('/order', varifyJWT, async (req, res) => {
             const decodedEmail = req.decoded.email;
             const email = req.query.email;
-            console.log(email)
             if (email === decodedEmail) {
                 const query = { email: email };
                 const cursor = orderCollection.find(query);
@@ -112,12 +115,15 @@ async function run() {
             }
         });
 
+        // get all orders
         app.get('/orders', async (req, res) => {
             const query = {};
             const cursor = orderCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
         });
+
+        // delete order
         app.delete('/orders/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -125,11 +131,13 @@ async function run() {
             res.send(result);
         });
 
+        // add customer
         app.post('/customer', async (req, res) => {
             const customer = req.body;
-            console.log(customer)
             const result = await customerCollection.insertOne(customer);
         });
+
+        // get all customers
         app.get('/customers', async (req, res) => {
             const query = {};
             const cursor = customerCollection.find(query);
@@ -137,7 +145,7 @@ async function run() {
             res.send(result);
         });
 
-        // recent
+        // get recents product
         app.get('/recents', async (req, res) => {
             const query = {};
             const cursor = recentProduct.find(query);
