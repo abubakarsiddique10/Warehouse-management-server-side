@@ -38,7 +38,7 @@ async function run() {
         const recentProduct = client.db('phone-corner').collection('recentProduct');
 
 
-        // Auth
+        // Authentication
         app.post('/login', async (req, res) => {
             const user = req.body;
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
